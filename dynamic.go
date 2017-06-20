@@ -1,4 +1,4 @@
-// +build !static_lzma
+// +build !static_liblzma
 
 package xz
 
