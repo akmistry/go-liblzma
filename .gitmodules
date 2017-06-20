@@ -1,0 +1,3 @@
+[submodule "internal/xz"]
+	path = internal/xz
+	url = https://github.com/xz-mirror/xz.git

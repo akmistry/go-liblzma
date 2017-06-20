@@ -1,0 +1,1 @@
+xz/src/liblzma/simple/sparc.c

@@ -1,0 +1,1 @@
+xz/src/liblzma/common/alone_encoder.c

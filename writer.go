@@ -5,7 +5,6 @@
 package xz
 
 /*
-#cgo LDFLAGS: -llzma
 #include <lzma.h>
 #include <stdlib.h>
 int go_lzma_code(
