@@ -40,7 +40,7 @@ var _ io.ReadCloser = &Decompressor{}
 func NewReader(r io.Reader) (*Decompressor, error) {
 	dec := new(Decompressor)
 	dec.rd = r
-	dec.buffer = make([]byte, DefaultBufsize)
+	dec.buffer = getBuffer(DefaultBufsize)
 	dec.offset = DefaultBufsize
 	dec.handle = allocLzmaStream(dec.handle)
 	// Initialize decoder
@@ -89,6 +89,8 @@ func (r *Decompressor) Close() error {
 		C.lzma_end(r.handle)
 		C.free(unsafe.Pointer(r.handle))
 		r.handle = nil
+		putBuffer(r.buffer)
+		r.buffer = nil
 	}
 	return nil
 }

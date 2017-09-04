@@ -37,7 +37,7 @@ func NewWriter(w io.Writer, preset Preset) (*Compressor, error) {
 	enc := new(Compressor)
 	// The zero lzma_stream is the same thing as LZMA_STREAM_INIT.
 	enc.writer = w
-	enc.buffer = make([]byte, DefaultBufsize)
+	enc.buffer = getBuffer(DefaultBufsize)
 	enc.handle = allocLzmaStream(enc.handle)
 	// Initialize encoder
 	ret := C.lzma_easy_encoder(enc.handle, C.uint32_t(preset), C.lzma_check(CheckCRC64))
@@ -53,7 +53,7 @@ func NewWriterCustom(w io.Writer, preset Preset, check Checksum, bufsize int) (*
 	enc := new(Compressor)
 	// The zero lzma_stream is the same thing as LZMA_STREAM_INIT.
 	enc.writer = w
-	enc.buffer = make([]byte, bufsize)
+	enc.buffer = getBuffer(bufsize)
 	enc.handle = allocLzmaStream(enc.handle)
 
 	// Initialize encoder
@@ -133,6 +133,8 @@ func (enc *Compressor) Close() error {
 		C.lzma_end(enc.handle)
 		C.free(unsafe.Pointer(enc.handle))
 		enc.handle = nil
+		putBuffer(enc.buffer)
+		enc.buffer = nil
 		if er != nil {
 			return er
 		}
